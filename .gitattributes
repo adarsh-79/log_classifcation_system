@@ -1,1 +1,1 @@
-*.ipynb linguist-vendored
+.ipynb_checkpoints/* linguist-vendored
