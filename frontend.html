@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Log Classifier</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 text-gray-900">
+  <div class="min-h-screen flex items-center justify-center px-4">
+    <div class="bg-white shadow-xl rounded-xl p-8 max-w-xl w-full space-y-6">
+      <h1 class="text-2xl font-bold text-center">Log Classification System</h1>
+
+      <form id="logForm" class="space-y-4">
+        <div>
+          <label class="block mb-1 font-medium">Timestamp</label>
+          <input
+            type="text"
+            name="timestamp"
+            placeholder="2025-07-29T12:00:00Z"
+            required
+            class="w-full border border-gray-300 rounded-md px-3 py-2 focus:ring focus:ring-blue-200"
+          />
+        </div>
+
+        <div>
+          <label class="block mb-1 font-medium">Source</label>
+          <select
+            name="source"
+            required
+            class="w-full border border-gray-300 rounded-md px-3 py-2 focus:ring focus:ring-blue-200"
+          >
+            <option value="">Select source</option>
+            <option>ModernCRM</option>
+            <option>AnalyticsEngine</option>
+            <option>ModernHR</option>
+            <option>BillingSystem</option>
+            <option>ThirdPartyAPI</option>
+            <option>LegacyCRM</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="block mb-1 font-medium">Log Message</label>
+          <textarea
+            name="log_message"
+            placeholder="Enter log message here..."
+            required
+            class="w-full border border-gray-300 rounded-md px-3 py-2 h-24 focus:ring focus:ring-blue-200"
+          ></textarea>
+        </div>
+
+        <button
+          type="submit"
+          class="w-full bg-blue-600 text-white font-semibold py-2 rounded hover:bg-blue-700 transition"
+        >
+          Classify Log
+        </button>
+      </form>
+
+      <div id="result" class="text-center text-lg font-semibold"></div>
+    </div>
+  </div>
+
+  <script>
+    const form = document.getElementById("logForm");
+    const result = document.getElementById("result");
+
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      result.textContent = "Processing...";
+
+      const formData = new FormData(form);
+      const data = Object.fromEntries(formData.entries());
+
+      try {
+        const response = await fetch("http://127.0.0.1:8000/predict", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(data),
+        });
+
+        const res = await response.json();
+        if (response.ok) {
+          result.textContent = `Prediction: ${res["log message label"]}`;
+        } else {
+          result.textContent = `Error: ${res.detail || JSON.stringify(res)}`;
+        }
+      } catch (err) {
+        result.textContent = "Server error. Is FastAPI running?";
+      }
+    });
+  </script>
+</body>
+</html>
