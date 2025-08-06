@@ -24,7 +24,7 @@ async def classify(log_message: UserInput):
     
     try:
         log_label = classify_log(log_msg_dict)
-        output = {"log message label": f"{log_label}"}
+        output = {"log message label": log_label}
 
         return JSONResponse(status_code= 200, content= output)
     
