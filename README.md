@@ -1,5 +1,5 @@
 
-# 🔍 Log Classification System
+# Intelligent-Log-Classification-Pipeline
 
 A hybrid log classification system that categorizes log messages using three different techniques: **Regex-based rules**, **SBERT-based semantic similarity**, and **LLM-based classification (LLaMA-3.1)**. This layered system is designed for flexibility, precision, and extensibility in production environments.
 
